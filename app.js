@@ -24,14 +24,17 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use((req, res, next) => {
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   next();
+  res.setHeader('no-referrer');
 });
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 app.use(cors());
-
+app.use((req, res, next) => {
+  next();
+  res.setHeader('no-referrer');
+});
 app.use('/api/v1/todo-list/list', todoListRouter);
 app.use('/api/v1/todo-list/task', todoTaskRouter);
 
