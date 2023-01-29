@@ -36,6 +36,9 @@ app.post('/api/v1/send-mail', (req, res, next) => {
     message: req.body.message,
     sentTime: req.body.sentTime,
   });
+  email.save().then(() => {
+    console.log('email saved');
+  });
   const msg = {
     to: req.body.email,
     from: process.env.SENDGRID_EMAIL,
@@ -47,9 +50,7 @@ app.post('/api/v1/send-mail', (req, res, next) => {
   sgMail
     .send(msg)
     .then(() => {
-      email.save().then(() => {
-        console.log('email saved');
-      });
+      console.log('email sent');
     })
     .catch((error) => {
       console.error(error);
