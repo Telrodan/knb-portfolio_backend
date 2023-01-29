@@ -36,7 +36,6 @@ app.post('/api/v1/send-mail', (req, res, next) => {
     message: req.body.message,
     sentTime: req.body.sentTime,
   });
-  console.log(email);
   const msg = {
     to: req.body.email,
     from: process.env.SENDGRID_EMAIL,
