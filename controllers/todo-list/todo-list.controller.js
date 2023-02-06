@@ -1,4 +1,4 @@
-const TodoList = require('../../models/todo-list/list-model');
+const TodoList = require('../../models/todo-list/list.model');
 
 exports.createList = (req, res, next) => {
   const list = new TodoList({

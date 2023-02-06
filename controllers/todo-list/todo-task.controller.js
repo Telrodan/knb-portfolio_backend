@@ -1,4 +1,4 @@
-const TodoTask = require('../../models/todo-list/task-model');
+const TodoTask = require('../../models/todo-list/task.model');
 
 exports.createTask = (req, res, next) => {
   const task = new TodoTask({

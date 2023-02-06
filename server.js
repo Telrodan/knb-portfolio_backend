@@ -1,5 +1,4 @@
 const dotenv = require('dotenv');
-const debug = require('debug')('node-angular');
 
 dotenv.config({ path: './config.env' });
 

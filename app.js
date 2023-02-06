@@ -3,9 +3,9 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const sgMail = require('@sendgrid/mail');
-const todoListRouter = require('./routes/todo-list/todo-list-routes');
-const todoTaskRouter = require('./routes/todo-list/todo-task-routes');
-const Email = require('./models/email-model');
+const todoListRouter = require('./routes/todo-list/todo-list.routes');
+const todoTaskRouter = require('./routes/todo-list/todo-task.routes');
+const Email = require('./models/email.model');
 
 const app = express();
 
@@ -29,16 +29,10 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 app.use(cors());
+app.use('/api/v1/todo-list/list', todoListRouter);
+app.use('/api/v1/todo-list/task', todoTaskRouter);
+
 app.post('/api/v1/send-mail', (req, res, next) => {
-  const email = new Email({
-    name: req.body.name,
-    email: req.body.email,
-    message: req.body.message,
-    sentTime: req.body.sentTime,
-  });
-  email.save().then(() => {
-    console.log('email saved');
-  });
   const msg = {
     to: req.body.email,
     from: process.env.SENDGRID_EMAIL,
@@ -50,14 +44,26 @@ app.post('/api/v1/send-mail', (req, res, next) => {
   sgMail
     .send(msg)
     .then(() => {
-      console.log('email sent');
+      const email = new Email({
+        name: req.body.name,
+        email: req.body.email,
+        message: req.body.message,
+        sentTime: req.body.sentTime,
+      });
+      return email;
+    })
+    .then((email) => {
+      email.save();
+    })
+    .then(() => {
+      res.status(200).json({
+        message: 'Message sent and saved!',
+      });
     })
     .catch((error) => {
       console.error(error);
     });
 });
-app.use('/api/v1/todo-list/list', todoListRouter);
-app.use('/api/v1/todo-list/task', todoTaskRouter);
 
 app.all('*', (req, res, next) => {
   const err = new Error(`Can't find ${req.originalUrl} on the server`);
