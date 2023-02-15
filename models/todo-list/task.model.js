@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const todoTaskSchema = new mongoose.Schema({
-  title: {
+  taskName: {
     type: String,
-    unique: true,
     required: [true, 'Task must have a title.'],
   },
   listId: {
