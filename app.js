@@ -4,9 +4,10 @@ const cors = require('cors');
 
 const connection = require('./db');
 
+const workRoutes = require('./routes/work.routes');
+const emailRouter = require('./routes/email.routes');
 const todoListRouter = require('./routes/todo-list/todo-list.routes');
 const todoTaskRouter = require('./routes/todo-list/todo-task.routes');
-const emailRouter = require('./routes/email.routes');
 
 const AppError = require('./utils/app-error');
 const globalErrorHandler = require('./controllers/error.controller');
@@ -25,9 +26,10 @@ app.use(express.static(`${__dirname}/public`));
 app.use(cors());
 app.options('*', cors());
 
+app.use(`${apiVersion}works`, workRoutes);
+app.use(`${apiVersion}emails`, emailRouter);
 app.use(`${apiVersion}todo/task`, todoTaskRouter);
 app.use(`${apiVersion}todo/list`, todoListRouter);
-app.use(`${apiVersion}emails`, emailRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

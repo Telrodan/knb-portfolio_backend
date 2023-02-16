@@ -13,9 +13,9 @@ const emailSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  sentTime: {
-    type: String,
-    required: true,
+  sentAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 
